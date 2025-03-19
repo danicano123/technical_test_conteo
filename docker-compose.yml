@@ -1,27 +1,25 @@
 version: "3.8"
 
 services:
-  app:
+  backend:
     build: .
-    container_name: node_app
     ports:
       - "3000:3000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/prueba_backend
     depends_on:
-      - mongo
+      - mongo_db
+    env_file:
+      - .env
     volumes:
       - .:/app
-    restart: always
+    command: npm start
 
-  mongo:
+  mongo_db:
     image: mongo:6
-    container_name: mongo_db
+    container_name: mongodb_container
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    restart: always
 
 volumes:
   mongo_data:
