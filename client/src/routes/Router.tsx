@@ -1,0 +1,36 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RoutesSchema } from "./RoutesSchema";
+import { createElement } from "react";
+import ProtectedRoutes from "./protectedRoutes";
+import Layout from "../components/Layout/Layout";
+
+const router = createBrowserRouter(
+  RoutesSchema.map((route: any) => ({
+    ...route,
+    element: (
+      <Layout>
+        {route.isProtected ? (
+          <ProtectedRoutes requiredRole={route.requiredRole}>
+            {route.element}
+          </ProtectedRoutes>
+        ) : (
+          route.element
+        )}
+      </Layout>
+    ),
+    children: route.children?.map((child: any) => ({
+      ...child,
+      element: createElement(child.element),
+    })),
+  }))
+);
+
+function Router() {
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  );
+}
+
+export default Router;

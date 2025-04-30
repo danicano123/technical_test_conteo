@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
@@ -12,6 +14,21 @@ services:
     volumes:
       - .:/app
     command: npm start
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    working_dir: /app
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    volumes:
+      - ./client:/app
+    command: serve -s dist -l 5173
 
   mongo_db:
     image: mongo:6
