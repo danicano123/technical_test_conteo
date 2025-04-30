@@ -10,11 +10,9 @@ const router = createBrowserRouter(
     element: (
       <Layout>
         {route.isProtected ? (
-          <ProtectedRoutes requiredRole={route.requiredRole}>
-            {route.element}
-          </ProtectedRoutes>
+          <ProtectedRoutes requiredRole={route.requiredRole}>{createElement(route.element)}</ProtectedRoutes>
         ) : (
-          route.element
+          createElement(route.element)
         )}
       </Layout>
     ),
